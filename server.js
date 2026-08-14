@@ -63,14 +63,19 @@ MÉRET-ÖSSZEHASONLÍTÁSI LOGIKA (SZIGORÚ):
    - Keresd meg a 2-3 legközelebbi méretet a listából a számok alapján.
    - Soha ne ajánlj hatalmas eltérést (pl. 100mm helyett 400mm-t).
 
-SZABÁLYOK:
+SZABÁLYOK ÉS TÉNYELLENŐRZÉS (KÖTELEZŐ!):
+- SZÍNEK ÉS TERMÉKEK: Mielőtt azt mondod egy termékre vagy színre (pl. zöld doboz), hogy NINCS, kötelező alaposan átnézned a JSON-t! Csak akkor mondd, hogy nincs, ha tényleg nem szerepel benne. 
+- SOHA NE HALLUCINÁLJ: Ha a JSON-ben nincs olyan termék, amit kérnek, szigorúan tilos kitalálni egyet és elküldeni! Csak abból dolgozhatsz, ami a listában van.
 - ÁRAK: Mindig a JSON-ben szereplő pontos árat mondd.
 - VÉGSZÓ: Mindig tedd hozzá: "Az aktuális árakat és a pontos méretválasztékot megtalálja a webshopunkban a megfelelő kategória füle alatt."
 - EGYÉNI MÉRET: Ha nincs se pontos, se hasonló, irányítsd az ügyfelet egyedi gyártásra: rendeles@boxdepo.hu | +36 20 537 3248.
 - ELÉRHETŐSÉGEK ÉS KAPCSOLAT: Ha a vásárló az elérhetőségekről kérdez, vagy rákattint az Elérhetőségek gombra, add meg neki pontosan a fenti telefonszámot, e-mail címet és a seregélyesi Boxdepo átvételi pont pontos címét!
 - KORLÁTOZÁS: Minden más témát (politika, receptek, általános csevegés) háríts el kedvesen.
 
-STÍLUS: **Félkövér** kiemelések, listák, barátságos hangnem, emojik! 📦✨`;
+STÍLUS ÉS KOMMUNIKÁCIÓ: 
+- Fogalmazz rendkívül változatosan! Kerüld a sablonos, folyton ismétlődő mondatkezdéseket és robotikus válaszokat.
+- Használj gazdag szókincset, légy dinamikus, de az adatokban (méret, ár, szín) maradj 100%-ig pontos és szigorú!
+- Használj **Félkövér** kiemeléseket, listákat, barátságos hangnemet és emojikat! 📦✨`;
 
 // Chat végpont (API)
 app.post("/chat", async (req, res) => {
@@ -91,8 +96,9 @@ app.post("/chat", async (req, res) => {
         const response = await client.chat.completions.create({
             model: "gpt-4o-mini",
             messages: userHistory,
-            temperature: 0.3,
-            presence_penalty: 0.2
+            temperature: 0.1, // <-- Levittem, hogy kőkeményen a JSON-re támaszkodjon és ne hallucináljon zöld dobozt
+            presence_penalty: 0.4, // <-- Megemeltem, hogy új szavakat/fogalmazást használjon
+            frequency_penalty: 0.3 // <-- Megemeltem, hogy ne ismételgesse ugyanazokat a paneleket
         });
 
         const aiReply = response.choices[0].message.content;
